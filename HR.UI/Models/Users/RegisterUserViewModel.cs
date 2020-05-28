@@ -1,4 +1,4 @@
-﻿namespace HR_UI.Models.Users
+﻿namespace HR.UI.Models.Users
 {
     public class RegisterUserViewModel
     {

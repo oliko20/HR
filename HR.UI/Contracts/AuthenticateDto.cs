@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HR.Api.Contracts
+namespace HR.UI.Contracts
 {
     public class AuthenticateDto
     {

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using HR.UI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using HR_UI.Models;
 
-namespace HR_UI.Controllers
+namespace HR.UI.Controllers
 {
     public class HomeController : Controller
     {

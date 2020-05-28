@@ -1,9 +1,9 @@
 ﻿using System;
-using HR.Api.Models;
+using HR.UI.Contracts;
 
-namespace HR_UI.Models.Employees
+namespace HR.UI.Models.Employees
 {
-    public class EmployeeListViewModel
+    public class CreateEmployeeViewModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
