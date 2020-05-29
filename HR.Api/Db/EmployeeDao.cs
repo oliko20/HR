@@ -20,7 +20,7 @@ namespace HR.Api.Db
         {
             var list = new List<Employee>();
             await using var connection = new SqlConnection(_connectionString);
-           
+
             var command = new SqlCommand(
                 @$"SELECT [Id]
                      ,[FirstName]
@@ -37,14 +37,12 @@ namespace HR.Api.Db
             var queryParams = new List<string> { "IsDeleted = 0" };
             if (!string.IsNullOrEmpty(firstName))
             {
-                queryParams.Add("FirstName LIKE N'@firstName'");
-                command.Parameters.AddWithValue("@firstName", firstName);
+                queryParams.Add($"FirstName LIKE N'{firstName}%'");
             }
 
             if (!string.IsNullOrEmpty(lastName))
             {
-                queryParams.Add("LastName LIKE N'@lastName'");
-                command.Parameters.AddWithValue("@lastName", lastName);
+                queryParams.Add($"LastName LIKE N'{lastName}%'");
             }
 
             var joinedQuery = string.Join(" AND ", queryParams);
@@ -121,7 +119,7 @@ namespace HR.Api.Db
                      ,[Status]
                      ,[FireDate]
                      ,[IsDeleted]
-                 FROM [dbo].[Employees] WHERE @Id = PersonalId", connection);
+                 FROM [dbo].[Employees] WHERE @Id = PersonalId AND IsDeleted = 0", connection);
             command.Parameters.AddWithValue("@Id", id);
             await connection.OpenAsync();
             var reader = await command.ExecuteReaderAsync();

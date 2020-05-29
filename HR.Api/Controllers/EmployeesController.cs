@@ -21,25 +21,25 @@ namespace HR.Api.Controllers
         [HttpGet]
         public async Task<List<Employee>> List([FromQuery]string firstName, [FromQuery]string lastName)
         {
-            return await _employeeDao.ListAsync(firstName,lastName);
+            return await _employeeDao.ListAsync(firstName, lastName);
         }
 
         [HttpGet("{id}")]
         public async Task<Employee> GetById(int id)
         {
-            return  await _employeeDao.GetByIdAsync(id);
+            return await _employeeDao.GetByIdAsync(id);
         }
 
         [HttpPost]
         public async Task<ActionResult<int>> Create([FromBody] CreateEmployeeDto model)
         {
-          var employee =  await _employeeDao.GetByPersonalIdAsync(model.PersonalId);
-          if (employee != null)
-          {
-              return Conflict($"Employee with personalId {model.PersonalId} already exists");
-          }
+            var employee = await _employeeDao.GetByPersonalIdAsync(model.PersonalId);
+            if (employee != null)
+            {
+                return Conflict($"Employee with personalId {model.PersonalId} already exists");
+            }
 
-          return Ok(await _employeeDao.CreateAsync(model.GetEmployee()));
+            return Ok(await _employeeDao.CreateAsync(model.GetEmployee()));
         }
 
         [HttpPut("{id}")]
@@ -64,10 +64,10 @@ namespace HR.Api.Controllers
                 return NotFound($"Employee with id {id} not found");
             }
             employee.IsDeleted = true;
-           await _employeeDao.UpdateAsync(employee);
-           return Ok();
+            await _employeeDao.UpdateAsync(employee);
+            return Ok();
         }
 
-        
+
     }
 }
