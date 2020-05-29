@@ -16,7 +16,7 @@ namespace HR.Api.Db
         }
         public async Task<int> CreateAsync(User item)
         {
-            await using var connection = new SqlConnection();
+            await using var connection = new SqlConnection(_connectionString);
             var command = new SqlCommand(
                 @"INSERT INTO [dbo].[Users](
                        [FirstName]

@@ -1,3 +1,5 @@
+using System;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +22,12 @@ namespace HR.UI
         {
             services.AddControllersWithViews();
             services.AddSingleton<HttpClientWrapper>();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Users/Login";
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,15 +43,19 @@ namespace HR.UI
             }
             app.UseStaticFiles();
 
+            app.UseAuthentication();
+
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCookiePolicy(new CookiePolicyOptions());
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Employees}/{action=Index}/{id?}");
             });
         }
     }

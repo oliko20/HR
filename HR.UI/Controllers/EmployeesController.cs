@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using HR.Api.Contracts;
 using HR.UI.Contracts;
 using HR.UI.Models.Employees;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HR.UI.Controllers
 {
+    [Authorize]
     public class EmployeesController : Controller
     {
         private readonly HttpClientWrapper _clientWrapper;
@@ -58,14 +58,12 @@ namespace HR.UI.Controllers
                 JobPosition = model.JobPosition,
                 PersonalId = model.PersonalId
             };
-            var statusCode = await _clientWrapper.PostAsync<CreateEmployeeDto>("api/Employees", employeeToCreate);
-            if (statusCode == HttpStatusCode.OK)
+            var response = await _clientWrapper.PostAsync("api/Employees", employeeToCreate);
+
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index");
 
-            if (statusCode == HttpStatusCode.Conflict)
-                ModelState.AddModelError("Error", $"Employee with personalId:{model.PersonalId} already exists");
-            else
-                ModelState.AddModelError("Error", "Can not add employee");
+            ModelState.AddModelError("", await response.Content.ReadAsStringAsync());
 
             return View();
         }

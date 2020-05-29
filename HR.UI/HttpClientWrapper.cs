@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.VisualStudio.Web.CodeGeneration.Templating;
 
 namespace HR.UI
 {
@@ -29,11 +30,18 @@ namespace HR.UI
             result.EnsureSuccessStatusCode();
         }
 
-        public async Task<HttpStatusCode> PostAsync<T>(string url, T body)
+        public async Task<HttpResponseMessage> PostAsync<T>(string url, T body)
+        {
+            var client = new HttpClient { BaseAddress = new Uri(_baseUrl) };
+            return await client.PostAsJsonAsync(url, body);
+        }
+
+        public async Task<TResult> PostAsync<T, TResult>(string url, T body)
         {
             var client = new HttpClient { BaseAddress = new Uri(_baseUrl) };
             var result = await client.PostAsJsonAsync(url, body);
-            return result.StatusCode;
+            result.EnsureSuccessStatusCode();
+            return await result.Content.ReadAsAsync<TResult>();
         }
 
         public async Task<T> PutAsync<T>(string url, T body)
